@@ -4,7 +4,7 @@ const Machine = require('../models/machine')
 
 function getMachine(req, res) {
     let machineId = req.params.id
-    Machine.findById(machineId, (err, machine) => {
+    Machine.findById(machineId, '_id clase description empresa chasis moving lastUpdate' , (err, machine) => {
         if (err) {
             res.status(500). send({ message: `Error en petición: ${err}`})
         }
@@ -41,7 +41,7 @@ function getMachines(req, res) {
             description: { "$regex": description, "$options": "i" },
             clase: { "$regex": clase, "$options": "i" },
             maquinaDadaDeBaja: { $in: [ false, null, undefined ] }
-        })
+        }, '_id description moving')
         .then(result => res.status(200).send({ result }))
 }
 
