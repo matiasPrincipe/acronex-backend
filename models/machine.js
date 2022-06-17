@@ -1,29 +1,30 @@
 'use strict'
 
 const mongoose = require('mongoose')
+const mongoosePaginate = require('mongoose-paginate-v2')
 const Schema = mongoose.Schema
 
 const MachineSchema = Schema({
-    description: String,
-    clase: { type: String, enum: ['Pulverizadora Terrestre', 'Avión Pulverizador', 'Cosechadora', 'Tractor Tolva']},
-    empresa: String,
+    description: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    clase: { type: String, required: true, enum: ['Pulverizadora Terrestre', 'Avión Pulverizador', 'Cosechadora', 'Tractor Tolva']},
+    empresa: {
+        type: String,
+        required: true
+    },
     chasis: String,
     moving: { type: Boolean, default: false },
     lastUpdate: { type: Date, default: new Date() },
-    data: {
-        general: {
-            bateriaInterna: String,
-            cosechando: { type: Boolean, default: false },
-            bateriaVechiculo: String,
-            usoCombustible: String
-        },
-        clima: {
-            temperatura: String,
-            humedad: String,
-            direccionViento: String,
-            velocidadViento: String
-        }
-    }
+    maquinaDadaDeBaja: { type: Boolean, default: false },
+    machineDatas: [{
+        type: Schema.Types.ObjectId,
+        ref: "MachineData"
+    }]
 })
+
+MachineSchema.plugin(mongoosePaginate)
 
 module.exports = mongoose.model('Machine', MachineSchema)
