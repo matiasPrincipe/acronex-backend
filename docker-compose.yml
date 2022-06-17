@@ -1,0 +1,23 @@
+version: "3"
+services:
+  front:
+    container_name: acronex_backend
+    build:
+      context: .
+      dockerfile: ./docker/backend/Dockerfile
+    ports:
+      - 3006:3006 # Expone el puerto 3006
+    volumes:      
+      - .:/app/ # Sincroniza entre host y contenedor todo el proyecto      
+      - /app/.nuxt # Excluye de lo que se sincroniza al host vendor      
+      - /app/node_modules # Excluye de lo que se sincroniza al host vendor      
+      - /app/dist # Excluye de lo que se sincroniza al host vendor
+  db:
+    container_name: acronex_db
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: acronex
+      MONGO_INITDB_ROOT_PASSWORD: acronex
+      MONGO_INITDB_DATABASE: acronex
